@@ -1,0 +1,172 @@
+---
+title: Contributing to Chitagá Tech
+description: Learn how to contribute to the Chitagá Tech project - from forking the repository to submitting pull requests
+---
+
+Chitagá Tech is a community-driven open source project. We welcome contributions from everyone who wants to help build technology opportunities for Chitagá!
+
+## Getting Started
+
+Before you begin, make sure you have:
+
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [Git](https://git-scm.com/) installed on your machine
+- A [GitHub](https://github.com) account
+- Basic knowledge of Astro, React, and TypeScript
+
+## Contribution Workflow
+
+<Steps>
+  <Step title="Fork the Repository">
+    Visit the [Chitagá Tech repository](https://github.com/yamiddevofic/chitaga-tech) on GitHub and click the "Fork" button in the top-right corner. This creates your own copy of the project.
+  </Step>
+
+  <Step title="Clone Your Fork">
+    Clone your forked repository to your local machine:
+
+    ```bash
+    git clone https://github.com/YOUR-USERNAME/chitaga-tech.git
+    cd chitaga-tech
+    ```
+  </Step>
+
+  <Step title="Install Dependencies">
+    Install the project dependencies using npm:
+
+    ```bash
+    npm install
+    ```
+  </Step>
+
+  <Step title="Create a Feature Branch">
+    Create a new branch for your contribution. Use a descriptive name:
+
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
+
+    Branch naming conventions:
+    - `feature/` - for new features
+    - `fix/` - for bug fixes
+    - `docs/` - for documentation changes
+    - `refactor/` - for code refactoring
+  </Step>
+
+  <Step title="Make Your Changes">
+    Make your changes to the codebase. Follow our [code style guidelines](/guides/code-style) to ensure consistency.
+
+    Run the development server to test your changes:
+
+    ```bash
+    npm run dev
+    ```
+
+    The site will be available at `http://localhost:4321`
+  </Step>
+
+  <Step title="Test Your Changes">
+    Before committing, make sure:
+
+    - The development server runs without errors
+    - Your changes work as expected
+    - The build completes successfully:
+
+    ```bash
+    npm run build
+    ```
+  </Step>
+
+  <Step title="Commit Your Changes">
+    Stage and commit your changes with a clear, descriptive commit message:
+
+    ```bash
+    git add .
+    git commit -m "Add: new hero animation component"
+    ```
+
+    Good commit message examples:
+    - `Add: contact form validation`
+    - `Fix: mobile menu not closing on link click`
+    - `Update: hero section responsive layout`
+    - `Refactor: extract ScrollAnimation to shared component`
+  </Step>
+
+  <Step title="Push to Your Fork">
+    Push your branch to your GitHub fork:
+
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+  </Step>
+
+  <Step title="Create a Pull Request">
+    1. Go to the [original Chitagá Tech repository](https://github.com/yamiddevofic/chitaga-tech)
+    2. Click "Pull Requests" and then "New Pull Request"
+    3. Click "compare across forks"
+    4. Select your fork and branch
+    5. Fill in the PR template with:
+       - A clear title
+       - Description of your changes
+       - Screenshots (if applicable)
+       - Any related issues
+    6. Click "Create Pull Request"
+  </Step>
+</Steps>
+
+## Pull Request Guidelines
+
+### PR Title Format
+
+Use a clear, descriptive title that summarizes your changes:
+
+- `Add contact form with email validation`
+- `Fix responsive layout on mobile hero section`
+- `Update services section with new content`
+
+### PR Description
+
+Include in your PR description:
+
+1. **What** - What changes did you make?
+2. **Why** - Why were these changes necessary?
+3. **How** - How did you implement the changes?
+4. **Testing** - How did you test the changes?
+
+### Review Process
+
+- A maintainer will review your PR
+- Address any requested changes
+- Once approved, your PR will be merged
+
+## Keeping Your Fork Updated
+
+Keep your fork in sync with the original repository:
+
+```bash
+# Add the original repository as upstream
+git remote add upstream https://github.com/yamiddevofic/chitaga-tech.git
+
+# Fetch the latest changes
+git fetch upstream
+
+# Update your main branch
+git checkout main
+git merge upstream/main
+
+# Push to your fork
+git push origin main
+```
+
+## Need Help?
+
+If you have questions or need help:
+
+- Check existing [issues](https://github.com/yamiddevofic/chitaga-tech/issues)
+- Open a new issue with the "question" label
+- Reach out to the community through the contact form
+
+## Code of Conduct
+
+Be respectful, inclusive, and constructive. We're building this together for our community.
+
+Thank you for contributing to Chitagá Tech! 🚀

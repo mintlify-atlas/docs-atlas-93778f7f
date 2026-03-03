@@ -1,0 +1,265 @@
+---
+title: Stats Component
+description: Statistics display component with animated numbers and descriptions
+icon: square-5
+---
+
+The Stats component displays key metrics in a visually striking horizontal layout with animated numbers and dividers. Perfect for showcasing achievements, goals, or important figures.
+
+## Overview
+
+This component is built with Astro and presents statistics in a row with vertical dividers. Each stat animates into view with a scale effect, and the section uses a distinct background color to stand out.
+
+## Source Location
+
+```
+~/workspace/source/src/components/stats.astro
+```
+
+## Props
+
+This component does not accept any props. All content is hardcoded within the component.
+
+## Usage
+
+### Basic Usage
+
+```astro
+---
+import Stats from '../components/stats.astro';
+---
+
+<Stats />
+```
+
+## Features
+
+### Scale Animation
+
+Each stat item uses a scale animation for emphasis:
+
+```astro
+<ScrollAnimation delay={0.3} style={{ flex: 1 }} variants={{
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1 }
+}} client:load as="div">
+  <div class="stat-item">
+    <!-- Stat content -->
+  </div>
+</ScrollAnimation>
+```
+
+### Staggered Delays
+
+- **Label**: 0.2s delay (slide up)
+- **Stat 1**: 0.3s delay (scale)
+- **Stat 2**: 0.4s delay (scale)
+- **Stat 3**: 0.5s delay (scale)
+- **Stat 4**: 0.6s delay (scale)
+
+### Four Statistics
+
+Hardcoded first-year goals:
+
+1. **50** - chitagüenses formándose
+2. **4** - cursos gratuitos
+3. **10** - talleres prácticos
+4. **1** - proyecto hecho desde aquí
+
+## Layout Structure
+
+```
+stats-section
+└── stats-inner (max-width: 1080px)
+    ├── stats-label (ScrollAnimation wrapper)
+    └── stats-row
+        ├── stat-item (ScrollAnimation wrapper)
+        │   ├── stat-number
+        │   └── stat-desc
+        ├── stat-divider
+        ├── stat-item
+        ├── stat-divider
+        ├── stat-item
+        ├── stat-divider
+        └── stat-item
+```
+
+## Responsive Behavior
+
+### Mobile (< 640px)
+
+- Vertical stack layout (flex-direction: column)
+- 2rem gap between stats
+- Dividers hidden
+- Center-aligned content
+
+### Tablet+ (640px+)
+
+- Horizontal row layout (flex-direction: row)
+- No gap (dividers provide spacing)
+- Dividers visible (1px × 3.5rem, white with 15% opacity)
+- Center-aligned content
+
+```css
+@media (min-width: 640px) {
+  .stats-row {
+    flex-direction: row;
+    justify-content: center;
+    gap: 0;
+  }
+  
+  .stat-divider {
+    display: block;
+    width: 1px;
+    height: 3.5rem;
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+```
+
+## Styling Notes
+
+### Background Colors
+
+- **Light mode**: Green dark (`var(--color-green-dark)`)
+- **Dark mode**: Dark gray (`#191919`)
+
+```css
+.stats-section {
+  background: var(--color-green-dark);
+}
+
+:global(.dark) .stats-section {
+  background: #191919;
+}
+```
+
+### Typography
+
+**Label:**
+```css
+font-family: var(--font-pop);
+font-size: 0.75rem;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.12em;
+color: rgba(255, 255, 255, 0.5);
+```
+
+**Number:**
+```css
+font-family: var(--font-montserrat);
+font-weight: 700;
+font-size: 2.5rem;          /* Mobile */
+font-size: 3rem;            /* Tablet (768px+) */
+line-height: 1;
+color: #ffffff;
+```
+
+**Description:**
+```css
+font-family: var(--font-sans);
+font-size: 0.875rem;
+color: rgba(255, 255, 255, 0.7);
+letter-spacing: 0.02em;
+```
+
+### Stat Item Layout
+
+```css
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  text-align: center;
+}
+```
+
+## Section Spacing
+
+```css
+padding: 4rem 2rem;        /* Mobile */
+padding: 5rem 3rem;        /* Tablet (768px+) */
+padding: 5rem 4rem;        /* Desktop (1024px+) */
+```
+
+## Content Structure
+
+Hardcoded Spanish content:
+
+- **Label**: "Lo que queremos lograr en el primer año" (What we want to achieve in the first year)
+- **Stats**: Four key performance indicators with numbers and descriptions
+
+## Inline Styles
+
+Note the use of inline styles on ScrollAnimation:
+
+```astro
+<ScrollAnimation delay={0.3} style={{ flex: 1 }} ...>
+```
+
+This ensures the flex behavior is applied directly to the animated wrapper.
+
+## Animation Variants
+
+### Label Animation
+
+```javascript
+variants: {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+}
+```
+
+### Stat Animation
+
+```javascript
+variants: {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1 }
+```
+
+## Dependencies
+
+- `ScrollAnimation.jsx` - Animation wrapper component
+- Framer Motion (via ScrollAnimation)
+- CSS custom properties: `--color-green-dark`, `--font-pop`, `--font-montserrat`, `--font-sans`
+
+## Customization Ideas
+
+To make this component reusable:
+
+```typescript
+interface Stat {
+  number: string | number;
+  description: string;
+}
+
+interface Props {
+  label?: string;
+  stats: Stat[];
+}
+```
+
+Example usage:
+
+```astro
+<Stats 
+  label="Our Impact This Year"
+  stats={[
+    { number: 100, description: 'students trained' },
+    { number: 10, description: 'courses offered' },
+    { number: 5, description: 'projects completed' }
+  ]}
+/>
+```
+
+## Accessibility
+
+- High contrast white text on dark background
+- Semantic HTML structure
+- Readable font sizes (numbers are large and clear)
+- Proper spacing for readability
+- Stats remain accessible when animations are disabled

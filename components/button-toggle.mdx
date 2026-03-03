@@ -1,0 +1,157 @@
+---
+title: Button Toggle
+description: Dark mode toggle button component with theme state management
+---
+
+The `buttonToggle` component is a React-based interactive button that allows users to switch between light and dark themes. It uses React Icons for visual indicators and manages theme state internally.
+
+## Props
+
+This component accepts no props. It manages its own internal state.
+
+## Features
+
+### Theme State Management
+
+The component uses React `useState` hook to track the current theme:
+
+```jsx
+const [theme, setTheme] = useState("light");
+```
+
+Default theme is `"light"` on initial render.
+
+### Theme Toggle Logic
+
+On button click, the component:
+
+1. Toggles internal state between `"light"` and `"dark"`
+2. Calls the `toggleTheme()` utility to update the DOM
+
+```jsx
+onClick={() => {
+  setTheme(theme === "light" ? "dark" : "light");
+  toggleTheme();
+}}
+```
+
+### Visual Indicators
+
+The button displays different icons based on current theme:
+
+- **Light mode**: Shows moon icon (`FaMoon`) to indicate "switch to dark"
+- **Dark mode**: Shows sun icon (`FaSun`) to indicate "switch to light"
+
+```jsx
+{theme === "light" ? <FaMoon size={20} /> : <FaSun size={20} />}
+```
+
+## How Dark Mode Works
+
+The `toggleTheme` utility function toggles the `dark` class on the document root:
+
+```jsx
+const toggleTheme = () => {
+  document.documentElement.classList.toggle('dark');
+}
+```
+
+This allows CSS to apply dark mode styles using the `.dark` class selector:
+
+```css
+/* Light mode default */
+.container {
+  background: white;
+  color: black;
+}
+
+/* Dark mode override */
+.dark .container {
+  background: #1a1a1a;
+  color: white;
+}
+```
+
+## Styling
+
+The component includes inline styles:
+
+```jsx
+style={{
+  fontSize: '1.25rem',
+  padding: '0.75rem 1rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.5rem'
+}}
+```
+
+These styles:
+- Center the icon within the button
+- Provide comfortable click target size
+- Add spacing between icon and any potential text
+
+## Usage Example
+
+```jsx
+import ButtonToggle from '../components/buttonToggle';
+
+function Header() {
+  return (
+    <header>
+      <nav>
+        {/* Navigation items */}
+      </nav>
+      <ButtonToggle />
+    </header>
+  );
+}
+```
+
+## Accessibility Considerations
+
+To improve accessibility, consider adding:
+
+```jsx
+<button 
+  id="toggle-theme"
+  aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+  onClick={handleClick}
+>
+  {/* Icon */}
+</button>
+```
+
+This provides screen reader users with context about the button's purpose.
+
+## Dependencies
+
+- **React**: For state management and component lifecycle
+- **react-icons**: Provides `FaSun` and `FaMoon` icons from Font Awesome
+- **toggleTheme**: Utility function that manipulates DOM classes
+
+## Persistence
+
+Note: The current implementation does not persist theme preference. Theme resets to `"light"` on page refresh.
+
+To add persistence, consider using `localStorage`:
+
+```jsx
+const [theme, setTheme] = useState(() => {
+  return localStorage.getItem('theme') || 'light';
+});
+
+const handleToggle = () => {
+  const newTheme = theme === "light" ? "dark" : "light";
+  setTheme(newTheme);
+  localStorage.setItem('theme', newTheme);
+  toggleTheme();
+};
+```
+
+## Source
+
+Location: `src/components/buttonToggle.jsx:7`
+
+Toggle utility: `src/components/toggleTheme.jsx:4`

@@ -1,0 +1,255 @@
+---
+title: Styling Guide
+description: Learn how to style components using Tailwind CSS v4 and the custom theme system
+---
+
+Chitagá Tech uses Tailwind CSS v4 with a custom theme system built on CSS variables. This guide covers the styling approach, theme customization, and best practices.
+
+## Tailwind CSS v4 Setup
+
+The project uses Tailwind CSS v4 integrated through Vite:
+
+```js astro.config.mjs
+import { defineConfig } from 'astro/config';
+import tailwindcss from "@tailwindcss/vite";
+import react from "@astrojs/react";
+
+export default defineConfig({
+  integrations: [react()],
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
+```
+
+<Note>
+  Tailwind CSS v4 uses a Vite plugin instead of PostCSS, providing faster build times and improved performance.
+</Note>
+
+## Theme System
+
+All theme customization is done in `src/styles/global.css` using the `@theme` directive:
+
+### Color Palette
+
+The project defines a custom color palette:
+
+```css global.css
+@theme {
+  --color-orange: #B93A05;
+  --color-white: #EAE8EB;
+  --color-skin: #E6B9A6;
+  --color-green-dark: #184014;
+  --color-green-light: #086842;
+}
+```
+
+These colors are available as Tailwind utilities:
+
+```jsx
+<button className="bg-orange text-white">Click me</button>
+<h1 className="text-green-dark">Heading</h1>
+<div className="bg-skin border-green-light">Content</div>
+```
+
+### Typography
+
+Custom font families are defined and ready to use:
+
+```css global.css
+@theme {
+  --font-pop: 'Poppins', sans-serif;
+  --font-sans: 'Source Sans 3', sans-serif;
+  --font-o-sans: 'Open Sans', sans-serif;
+  --font-roboto: 'Roboto', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
+}
+```
+
+Apply fonts using Tailwind classes:
+
+```jsx
+<h1 className="font-pop">Poppins Heading</h1>
+<p className="font-sans">Source Sans 3 paragraph</p>
+<span className="font-montserrat">Montserrat text</span>
+```
+
+### Breakpoints
+
+Standard responsive breakpoints are configured:
+
+```css global.css
+@theme {
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+```
+
+Use these with Tailwind's responsive modifiers:
+
+```jsx
+<div className="px-4 md:px-8 lg:px-16 xl:px-24">
+  Responsive padding
+</div>
+```
+
+## Dark Mode
+
+Dark mode is implemented using a custom variant:
+
+```css global.css
+@custom-variant dark (&:where(.dark, .dark *));
+
+dark {
+  --color-orange: #D26029;
+  --color-gray-100: #1a1a1a;
+  --color-skin: #E6B9A6;
+  --color-green-dark: #184014;
+  --color-green-light: #086842;
+}
+```
+
+### Using Dark Mode
+
+Apply dark mode styles with the `dark:` modifier:
+
+<CodeGroup>
+```jsx React Component
+export function Card() {
+  return (
+    <div className="bg-white dark:bg-gray-100 text-green-dark dark:text-white">
+      <h2 className="text-orange dark:text-orange">Card Title</h2>
+      <p>This card adapts to dark mode</p>
+    </div>
+  );
+}
+```
+
+```css Custom CSS
+.nav-link {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+:where(.dark, .dark *) .nav-link {
+  color: rgba(255, 255, 255, 0.7);
+}
+```
+</CodeGroup>
+
+### Theme Toggle
+
+The theme is controlled by adding/removing the `.dark` class on the root element:
+
+```js
+// Toggle dark mode
+document.documentElement.classList.toggle('dark');
+
+// Enable dark mode
+document.documentElement.classList.add('dark');
+
+// Disable dark mode
+document.documentElement.classList.remove('dark');
+```
+
+## Global Styles
+
+Base styles are applied in the `@layer base` directive:
+
+```css global.css
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply min-h-screen w-full m-0 overflow-x-hidden;
+    background: #ffffff;
+  }
+  .dark body {
+    background: #191919;
+  }
+}
+```
+
+## Component Styling Best Practices
+
+<Steps>
+  <Step title="Prefer Tailwind utilities">
+    Use Tailwind classes for most styling needs:
+
+    ```jsx
+    <div className="flex items-center gap-4 p-6 rounded-lg bg-white dark:bg-gray-100">
+      Content
+    </div>
+    ```
+  </Step>
+
+  <Step title="Use CSS classes for complex patterns">
+    For repeated complex styles or animations, create CSS classes in `global.css`:
+
+    ```css
+    .header-brand {
+      @apply flex items-center gap-2.5 no-underline;
+      transition: transform 0.2s ease;
+    }
+
+    .header-brand:hover {
+      transform: scale(1.03);
+    }
+    ```
+  </Step>
+
+  <Step title="Support dark mode everywhere">
+    Always provide dark mode variants for colors:
+
+    ```jsx
+    <p className="text-green-dark dark:text-white">
+      Accessible in both themes
+    </p>
+    ```
+  </Step>
+
+  <Step title="Use CSS variables for dynamic values">
+    Reference theme variables directly in CSS:
+
+    ```css
+    .custom-element {
+      color: var(--color-orange);
+      font-family: var(--font-montserrat);
+    }
+    ```
+  </Step>
+</Steps>
+
+## Animation with Framer Motion
+
+Framer Motion is available for React components:
+
+```jsx
+import { motion } from 'framer-motion';
+
+export function AnimatedCard() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="p-6 bg-white dark:bg-gray-100 rounded-lg"
+    >
+      Animated content
+    </motion.div>
+  );
+}
+```
+
+<Note>
+  Framer Motion works seamlessly with Tailwind classes. Use `className` for static styles and Framer Motion for animations and transitions.
+</Note>
+
+## Next Steps
+
+- Explore the [component library](/components/hero)
+- Learn about [deployment](/guides/deployment)
+- Review [development setup](/guides/setup)

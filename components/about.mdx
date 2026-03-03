@@ -1,0 +1,148 @@
+---
+title: About Component
+description: About section component showcasing mission and vision with animated cards
+icon: square-2
+---
+
+The About component presents the organization's mission and vision through an engaging two-column layout with animated mission cards and a visual graphic.
+
+## Overview
+
+This component is built with Astro and features text content on one side with two animated mission cards, and a decorative SVG graphic on the other. All elements use `ScrollAnimation` for progressive reveal effects.
+
+## Source Location
+
+```
+~/workspace/source/src/components/about.astro
+```
+
+## Props
+
+This component does not accept any props. All content is hardcoded within the component.
+
+## Usage
+
+### Basic Usage
+
+```astro
+---
+import About from '../components/about.astro';
+---
+
+<About />
+```
+
+## Features
+
+### Multi-Level Animations
+
+The component uses staggered animations for a polished entrance:
+
+1. **Main text content** (0.2s delay) - Default fade-in-up
+2. **First mission card** (0.4s delay) - Slide from left (`x: -30`)
+3. **Second mission card** (0.6s delay) - Slide from left (`x: -30`)
+4. **Visual graphic** (0.3s delay) - Rotate effect (`rotate: -10` to `0`)
+
+```astro
+<ScrollAnimation delay={0.4} variants={{
+  hidden: { opacity: 0, x: -30 },
+  visible: { opacity: 1, x: 0 }
+}} client:load as="div">
+  <!-- Mission card -->
+</ScrollAnimation>
+```
+
+### Mission Cards
+
+The component includes two mission cards with icons and text:
+
+1. **Lo que queremos lograr** (What we want to achieve)
+   - Icon: Circle with info symbol
+   - Content: Vision for local tech talent
+
+2. **A dónde apuntamos** (Where we're heading)
+   - Icon: Eye symbol
+   - Content: Impact goals beyond the municipality
+
+### SVG Graphic
+
+Custom SVG visualization featuring:
+- Concentric circles at different opacities
+- Three colored nodes (orange and green)
+- Connecting lines between nodes
+- Center text "CT" (Chitagá Tech)
+
+## Layout Structure
+
+```
+about-section
+└── about-inner (max-width: 1080px, grid layout)
+    ├── about-text (ScrollAnimation wrapper)
+    │   ├── about-badge
+    │   ├── about-title
+    │   ├── about-description
+    │   └── about-mission
+    │       ├── about-card (first)
+    │       │   ├── about-icon (SVG)
+    │       │   └── content (h3 + p)
+    │       └── about-card (second)
+    │           ├── about-icon (SVG)
+    │           └── content (h3 + p)
+    └── about-visual (ScrollAnimation wrapper)
+        └── about-graphic (SVG)
+```
+
+## Responsive Behavior
+
+- **Mobile**: Single column, vertical stack
+- **Tablet (768px+)**: Two columns - content (1fr) + graphic (auto), 5rem gap
+- Mission cards stack vertically with 1rem gap
+
+## Styling Notes
+
+### Colors
+
+- Background: White (`#ffffff`) / Dark mode (`#191919`)
+- Badge: Green dark border / Orange border (dark mode)
+- Title: Green dark / White (dark mode)
+- Description text: Gray (`#4b5563`) / Light gray (`#d1d5db` dark mode)
+- Strong text: Green dark / Orange (dark mode)
+- Icons: Orange (`--color-orange`)
+
+### Card Hover Effects
+
+```css
+.about-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+```
+
+### Typography
+
+- Badge: `--font-pop`, 0.7rem, uppercase, letter-spacing
+- Title: `--font-montserrat`, 700 weight, 1.75rem (mobile) to 2.25rem (tablet+)
+- Description: `--font-sans`, 1rem, 1.7 line-height
+- Card headings: `--font-montserrat`, 600 weight, 0.95rem
+- Card text: `--font-sans`, 0.875rem
+
+## Content Structure
+
+The hardcoded Spanish content explains:
+- **Badge**: "El porqué" (The why)
+- **Title**: "Porque irse no debería ser la única opción"
+- **Description**: Explanation of the problem and solution
+- **Mission cards**: Goals and vision statements
+
+## Dependencies
+
+- `ScrollAnimation.jsx` - Animation wrapper component
+- Framer Motion (via ScrollAnimation)
+- CSS custom properties defined in global styles
+- SVG icons embedded inline
+
+## Accessibility
+
+- Semantic HTML with proper heading hierarchy
+- SVG elements use proper stroke and fill attributes
+- Strong tags for emphasis in description text

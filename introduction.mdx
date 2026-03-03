@@ -1,0 +1,158 @@
+---
+title: Introduction to Chitagá Tech
+description: A community technology platform bringing tech education and opportunities to Chitagá, Colombia
+---
+
+<img
+  className="block dark:hidden"
+  src="/images/hero-light.svg"
+  alt="Chitagá Tech Hero Light"
+/>
+<img
+  className="hidden dark:block"
+  src="/images/hero-dark.svg"
+  alt="Chitagá Tech Hero Dark"
+/>
+
+## Welcome to Chitagá Tech
+
+Chitagá Tech is a community technology platform built by professionals from Chitagá, Colombia, dedicated to bringing real tech education and opportunities to the local community. The platform is designed to ensure that staying in Chitagá is a choice, not a limitation.
+
+<Note>
+  **De Chitagüenses, para Chitagüenses** - Built by locals, for locals, Chitagá Tech creates a space where anyone can learn technology without leaving their homeland.
+</Note>
+
+## What is Chitagá Tech?
+
+Chitagá Tech is more than just a website—it's a movement to plant technological talent in Chitagá, Norte de Santander. The platform provides:
+
+- **Real training, not just digital literacy** - Programming, web design, and digital tools taught through real projects
+- **Community connection** - Spaces to connect with other Chitagüenses who share the same vision
+- **Professional mentorship** - Guidance from professionals who have already walked the path
+- **Local impact, global reach** - Skills that open doors anywhere in the world
+
+## Technical Stack
+
+Chitagá Tech is built with modern, performant web technologies:
+
+<CardGroup cols={2}>
+  <Card title="Astro" icon="rocket" href="https://astro.build">
+    Static site generation with island architecture for optimal performance
+  </Card>
+  <Card title="React" icon="react" href="https://react.dev">
+    Interactive UI components with client-side hydration
+  </Card>
+  <Card title="Tailwind CSS" icon="paintbrush" href="https://tailwindcss.com">
+    Utility-first CSS framework with Tailwind v4 and Vite plugin
+  </Card>
+  <Card title="Framer Motion" icon="wand-magic-sparkles" href="https://www.framer.com/motion">
+    Smooth scroll animations and interactive transitions
+  </Card>
+</CardGroup>
+
+## Core Features
+
+### Scroll-Based Animations
+
+The platform uses Framer Motion's `useInView` hook to create engaging scroll animations. Components fade in and slide up as users scroll through the page:
+
+```jsx src/components/ScrollAnimation.jsx
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+
+const ScrollAnimation = ({
+  children,
+  variants = {},
+  delay = 0,
+  as = "div"
+}) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { 
+    once: true, 
+    amount: 0.3,
+    margin: "0px 0px -100px 0px"
+  });
+
+  const defaultVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 }
+  };
+
+  const MotionComponent = motion[as];
+
+  return (
+    <MotionComponent
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={{ ...defaultVariants, ...variants }}
+      transition={{ duration: 0.6, ease: "easeOut", delay }}
+    >
+      {children}
+    </MotionComponent>
+  );
+};
+```
+
+### Dark Mode Support
+
+Seamless dark mode toggle with CSS custom properties and class-based theming:
+
+```jsx src/components/toggleTheme.jsx
+const toggleTheme = () => {
+    document.documentElement.classList.toggle('dark');
+}
+```
+
+### Component Architecture
+
+The platform follows Astro's component model with a mix of `.astro` and `.jsx` files:
+
+- **Layout components** - Base HTML structure with SEO meta tags
+- **Section components** - Hero, About, Services, Stats, Projects, Contact
+- **Interactive components** - ScrollAnimation, ButtonToggle, ToggleTheme
+
+<CardGroup cols={3}>
+  <Card title="Get Started" icon="play" href="/quickstart">
+    Quick guide to run the project locally
+  </Card>
+  <Card title="Components" icon="cube" href="/components/overview">
+    Explore the component library
+  </Card>
+  <Card title="Styling" icon="palette" href="/styling/overview">
+    Learn about the design system
+  </Card>
+</CardGroup>
+
+## Project Mission
+
+<Accordion title="Why we build this">
+  In Chitagá, there isn't a place to learn the skills this century demands. Many young people leave because they don't find opportunities here. Others stay without tools to compete. **Chitagá Tech** was born to change that: a physical and digital space, created by professionals from the municipality, where anyone can train in technology without having to leave their land.
+</Accordion>
+
+<Accordion title="What we want to achieve">
+  Plant technological talent in Chitagá. Ensure our young people have real access to quality training, and that if they ever leave, it's by choice and not because they had to.
+</Accordion>
+
+<Accordion title="Where we're headed">
+  From Chitagá, we can create, innovate, and transform. The talent from here will impact not only the municipality but Colombia and the world.
+</Accordion>
+
+## Next Steps
+
+<Steps>
+  <Step title="Clone the repository">
+    Get the source code on your local machine
+  </Step>
+  <Step title="Install dependencies">
+    Run `npm install` to set up the project
+  </Step>
+  <Step title="Start developing">
+    Launch the dev server with `npm run dev`
+  </Step>
+  <Step title="Explore the code">
+    Navigate through components and understand the architecture
+  </Step>
+</Steps>
+
+Ready to get started? Head over to the [Quickstart Guide](/quickstart) to run the project locally.

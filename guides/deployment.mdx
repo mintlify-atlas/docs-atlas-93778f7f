@@ -1,0 +1,317 @@
+---
+title: Deployment
+description: Deploy Chitagá Tech to production with build configuration and hosting options
+---
+
+Chitagá Tech is built with Astro and optimized for static site deployment. This guide covers the build process, configuration, and deployment to various platforms.
+
+## Build Process
+
+<Steps>
+  <Step title="Run the production build">
+    Build the site for production:
+
+    ```bash
+    npm run build
+    ```
+
+    This command:
+    - Compiles TypeScript and Astro components
+    - Processes Tailwind CSS and optimizes styles
+    - Bundles React components with Vite
+    - Generates static HTML pages
+    - Optimizes assets and images
+  </Step>
+
+  <Step title="Preview the build locally">
+    Test the production build before deploying:
+
+    ```bash
+    npm run preview
+    ```
+
+    The built site will be served at `http://localhost:4321`
+
+    <Note>
+      Use `npm run preview:host` to test on other devices on your local network.
+    </Note>
+  </Step>
+
+  <Step title="Deploy to production">
+    The build output is in the `dist/` directory and ready to deploy to any static hosting platform.
+  </Step>
+</Steps>
+
+## Build Configuration
+
+The Astro configuration includes essential settings for deployment:
+
+```js astro.config.mjs
+import { defineConfig } from 'astro/config';
+import tailwindcss from "@tailwindcss/vite";
+import react from "@astrojs/react";
+import sitemap from "@astrojs/sitemap";
+
+export default defineConfig({
+  site: 'https://chitaga-tech.vercel.app',
+  integrations: [react(), sitemap()],
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
+```
+
+### Key Configuration Options
+
+- **site**: The production URL of your site (required for sitemap generation)
+- **integrations**: 
+  - `@astrojs/react` - Enables React component support
+  - `@astrojs/sitemap` - Auto-generates `sitemap.xml` for SEO
+- **vite.plugins**: Tailwind CSS v4 integration via Vite
+
+## Deployment Platforms
+
+### Vercel (Recommended)
+
+Chitagá Tech is configured for Vercel deployment:
+
+<Steps>
+  <Step title="Connect your repository">
+    1. Go to [vercel.com](https://vercel.com)
+    2. Click "New Project"
+    3. Import your Git repository
+  </Step>
+
+  <Step title="Configure build settings">
+    Vercel auto-detects Astro projects. Verify these settings:
+
+    - **Framework Preset**: Astro
+    - **Build Command**: `npm run build`
+    - **Output Directory**: `dist`
+    - **Install Command**: `npm install`
+  </Step>
+
+  <Step title="Deploy">
+    Click "Deploy" and Vercel will build and publish your site.
+
+    Every push to your main branch will trigger automatic deployments.
+  </Step>
+</Steps>
+
+### Netlify
+
+Deploy to Netlify with these settings:
+
+```toml netlify.toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+```
+
+<CodeGroup>
+```bash CLI Deployment
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Build and deploy
+npm run build
+netlify deploy --prod --dir=dist
+```
+
+```bash Git Integration
+# Push to your repository
+git push origin main
+
+# Netlify auto-deploys from Git
+```
+</CodeGroup>
+
+### Cloudflare Pages
+
+Deploy to Cloudflare Pages:
+
+<Steps>
+  <Step title="Create a new project">
+    1. Go to Cloudflare Pages dashboard
+    2. Connect your Git repository
+  </Step>
+
+  <Step title="Build configuration">
+    Set these build settings:
+
+    - **Build command**: `npm run build`
+    - **Build output directory**: `dist`
+    - **Node version**: 18 or later
+  </Step>
+
+  <Step title="Deploy">
+    Cloudflare will build and deploy your site with automatic SSL and global CDN.
+  </Step>
+</Steps>
+
+### GitHub Pages
+
+For GitHub Pages deployment, add a workflow file:
+
+```yaml .github/workflows/deploy.yml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+Update `astro.config.mjs` for GitHub Pages:
+
+```js
+export default defineConfig({
+  site: 'https://username.github.io',
+  base: '/repository-name',
+  // ... rest of config
+});
+```
+
+## Sitemap Generation
+
+The `@astrojs/sitemap` integration automatically generates a sitemap at build time:
+
+- **Output**: `dist/sitemap-index.xml` and `dist/sitemap-0.xml`
+- **Includes**: All static pages and routes
+- **Updates**: Automatically on each build
+
+<Note>
+  The sitemap uses the `site` URL from `astro.config.mjs`. Make sure it matches your production domain.
+</Note>
+
+## Performance Optimization
+
+Astro automatically optimizes your build:
+
+- **HTML minification** - Reduces file size
+- **CSS optimization** - Removes unused styles, minifies output
+- **JavaScript bundling** - Combines and minimizes JS files
+- **Asset optimization** - Compresses images and static files
+- **Zero JS by default** - Astro pages ship with no JavaScript unless needed
+
+### Build Output
+
+Typical build produces:
+
+```
+dist/
+├── index.html
+├── about/index.html
+├── _astro/           # Bundled CSS and JS
+│   ├── page.*.css
+│   └── client.*.js
+├── sitemap-*.xml
+└── assets/           # Static files from public/
+```
+
+## Environment Variables
+
+For environment-specific configuration:
+
+<CodeGroup>
+```bash .env.production
+PUBLIC_SITE_URL=https://chitaga-tech.vercel.app
+PUBLIC_API_ENDPOINT=https://api.example.com
+```
+
+```js Usage in code
+// Access in any file
+const siteUrl = import.meta.env.PUBLIC_SITE_URL;
+```
+</CodeGroup>
+
+<Note>
+  Variables prefixed with `PUBLIC_` are exposed to client-side code. Never use this prefix for sensitive data.
+</Note>
+
+## Troubleshooting
+
+### Build fails with TypeScript errors
+
+Check your `tsconfig.json` extends the correct Astro config:
+
+```json
+{
+  "extends": "astro/tsconfigs/strict"
+}
+```
+
+### Styles not applying correctly
+
+Ensure Tailwind is properly configured in Vite plugins:
+
+```js astro.config.mjs
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
+```
+
+### Missing sitemap
+
+Verify the `site` URL is set in `astro.config.mjs`:
+
+```js
+export default defineConfig({
+  site: 'https://your-domain.com', // Required!
+});
+```
+
+## Next Steps
+
+- Review [development setup](/guides/setup)
+- Learn about [styling](/guides/styling)
+- Explore [Astro deployment docs](https://docs.astro.build/en/guides/deploy/)

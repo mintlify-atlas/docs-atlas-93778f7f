@@ -1,0 +1,242 @@
+---
+title: Projects Component
+description: Projects showcase component with cards displaying portfolio items and tech stacks
+icon: square-4
+---
+
+The Projects component displays a curated showcase of projects in a responsive grid layout. Each project card includes an image placeholder, title, description, and technology tags.
+
+## Overview
+
+This component is built with Astro and presents projects in an engaging card-based layout with staggered animations. Cards feature hover effects and technology tags to highlight the tech stack.
+
+## Source Location
+
+```
+~/workspace/source/src/components/projects.astro
+```
+
+## Props
+
+This component does not accept any props. All content is hardcoded within the component.
+
+## Usage
+
+### Basic Usage
+
+```astro
+---
+import Projects from '../components/projects.astro';
+---
+
+<Projects />
+```
+
+## Features
+
+### Staggered Card Animations
+
+Each project card animates with an incremental delay:
+
+- **Header**: 0.2s delay
+- **Card 1**: 0.3s delay  
+- **Card 2**: 0.4s delay
+- **Card 3**: 0.5s delay
+
+All cards use a slide-up animation:
+
+```astro
+<ScrollAnimation delay={0.3} variants={{
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0 }
+}} client:load as="div">
+  <!-- Project card -->
+</ScrollAnimation>
+```
+
+### Project Cards
+
+Three hardcoded projects:
+
+1. **Portal Educativo Chitagá**
+   - Icon: Monitor/display symbol
+   - Tech: Astro, React, Node.js
+   - Educational platform
+
+2. **Mapa Digital de Chitagá**
+   - Icon: Map pin/location symbol
+   - Tech: Leaflet, TypeScript, API REST
+   - Digital map of local businesses and tourism
+
+3. **App de Gestión Agrícola**
+   - Icon: Layers/stack symbol
+   - Tech: React Native, Firebase, IoT
+   - Agricultural management app
+
+## Layout Structure
+
+```
+projects-section
+└── projects-inner (max-width: 1080px)
+    ├── projects-header (ScrollAnimation wrapper)
+    │   ├── projects-badge
+    │   ├── projects-title
+    │   └── projects-subtitle
+    └── projects-grid
+        └── project-card (x3)
+            ├── project-image
+            │   └── project-image-placeholder (SVG)
+            └── project-body
+                ├── h3 (title)
+                ├── p (description)
+                └── project-tags
+                    └── project-tag (x3)
+```
+
+## Responsive Behavior
+
+### Grid Layout
+
+- **Mobile**: Single column, flex vertical, 2rem gap
+- **Small (640px+)**: 2-column grid, 1.5rem gap
+- **Large (1024px+)**: 2-column grid, 2rem gap
+- **XL (1280px+)**: 3-column grid, 2rem gap
+
+```css
+@media (min-width: 1280px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+```
+
+## Styling Notes
+
+### Colors
+
+- Background: White (`#ffffff`) / Dark mode (`#191919`)
+- Card background: White / Dark mode (`rgba(255, 255, 255, 0.04)`)
+- Card border: `rgba(0, 0, 0, 0.08)` / Dark mode (`rgba(255, 255, 255, 0.08)`)
+- Image placeholder background: `#f3f4f6` / Dark mode (`rgba(255, 255, 255, 0.06)`)
+- Tag background: Orange tint (`rgba(185, 58, 5, 0.08)`)
+
+### Card Hover Effects
+
+```css
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+:global(.dark) .project-card:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+```
+
+### Image Placeholder
+
+- Height: 180px fixed
+- Background: Light gray with centered SVG icon
+- Icon size: 3rem × 3rem
+- Icon color: Gray (`#9ca3af`) / Dark mode (`#6b7280`)
+
+### Technology Tags
+
+```css
+.project-tag {
+  font-family: var(--font-pop);
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  background: rgba(185, 58, 5, 0.08);
+  color: var(--color-orange);
+}
+```
+
+Tags wrap with `flex-wrap: wrap` and 0.5rem gap.
+
+### Typography
+
+- **Badge**: `--font-pop`, 0.7rem, uppercase, green/orange
+- **Title**: `--font-montserrat`, 700 weight, 1.75rem → 2.25rem (tablet+)
+- **Subtitle**: `--font-sans`, 1rem, gray, max-width 520px
+- **Card heading**: `--font-montserrat`, 600 weight, 1.05rem
+- **Card text**: `--font-sans`, 0.875rem, 1.65 line-height
+- **Tags**: `--font-pop`, 0.7rem, 500 weight
+
+## Card Anatomy
+
+### Image Section
+
+```astro
+<div class="project-image">
+  <div class="project-image-placeholder">
+    <svg><!-- Icon --></svg>
+  </div>
+</div>
+```
+
+### Body Section
+
+```astro
+<div class="project-body">
+  <h3>Project Title</h3>
+  <p>Project description</p>
+  <div class="project-tags">
+    <span class="project-tag">Tech 1</span>
+    <span class="project-tag">Tech 2</span>
+    <span class="project-tag">Tech 3</span>
+  </div>
+</div>
+```
+
+## Content Structure
+
+Hardcoded Spanish content:
+
+- **Badge**: "Hecho en Chitagá" (Made in Chitagá)
+- **Title**: "Proyectos que resuelven problemas reales de aquí"
+- **Subtitle**: Explanation that these are real tools, not academic exercises
+- **Cards**: Three local projects with descriptions and tech stacks
+
+## Section Spacing
+
+```css
+padding: 5rem 2rem;        /* Mobile */
+padding: 6rem 3rem;        /* Tablet (768px+) */
+padding: 8rem 4rem;        /* Desktop (1024px+) */
+```
+
+## Dependencies
+
+- `ScrollAnimation.jsx` - Animation wrapper component
+- Framer Motion (via ScrollAnimation)
+- CSS custom properties defined in global styles
+- Inline SVG icons for placeholders
+
+## Customization Ideas
+
+To make this component reusable with props:
+
+```typescript
+interface Project {
+  title: string;
+  description: string;
+  technologies: string[];
+  image?: string;
+  icon?: string;
+}
+
+interface Props {
+  projects: Project[];
+}
+```
+
+## Accessibility
+
+- Semantic HTML structure
+- Proper heading hierarchy
+- SVG icons as decorative elements
+- Readable text contrast
+- Card structure allows keyboard navigation

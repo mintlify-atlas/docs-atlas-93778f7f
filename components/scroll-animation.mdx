@@ -1,0 +1,373 @@
+---
+title: ScrollAnimation Component
+description: React wrapper component for scroll-triggered animations using Framer Motion
+icon: square-7
+---
+
+The ScrollAnimation component is a flexible React wrapper that triggers animations when elements come into view. It uses Framer Motion's `useInView` hook to detect visibility and animate children accordingly.
+
+## Overview
+
+This component is a React component (JSX) that wraps any children with scroll-triggered animation capabilities. It's used throughout the Chitagá Tech site to create smooth entrance effects.
+
+## Source Location
+
+```
+~/workspace/source/src/components/ScrollAnimation.jsx
+```
+
+## Props
+
+<ParamField path="children" type="ReactNode" required>
+  Content to be animated when scrolled into view
+</ParamField>
+
+<ParamField path="variants" type="object" default="{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }">
+  Custom Framer Motion animation variants. Supports any valid motion properties.
+</ParamField>
+
+<ParamField path="initial" type="string" default='"hidden"'>
+  Initial animation state (corresponds to variant key)
+</ParamField>
+
+<ParamField path="animate" type="string" default='"visible"'>
+  Target animation state when element is in view
+</ParamField>
+
+<ParamField path="transition" type="object" default="{ duration: 0.6, ease: 'easeOut' }">
+  Framer Motion transition configuration
+</ParamField>
+
+<ParamField path="className" type="string" default='""'>
+  CSS class name(s) to apply to the wrapper element
+</ParamField>
+
+<ParamField path="delay" type="number" default="0">
+  Delay in seconds before animation starts (added to transition)
+</ParamField>
+
+<ParamField path="as" type="string" default='"div"'>
+  HTML element type to render (div, section, article, etc.)
+</ParamField>
+
+<ParamField path="style" type="object" default="{}">
+  Inline styles to apply to the wrapper element
+</ParamField>
+
+## Usage
+
+### Basic Usage
+
+```jsx
+import ScrollAnimation from './ScrollAnimation.jsx';
+
+<ScrollAnimation>
+  <h2>This will fade in from below</h2>
+</ScrollAnimation>
+```
+
+### Custom Variants
+
+```jsx
+<ScrollAnimation
+  variants={{
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1 }
+  }}
+>
+  <div>This will scale up</div>
+</ScrollAnimation>
+```
+
+### With Delay
+
+```jsx
+<ScrollAnimation delay={0.3}>
+  <p>This appears 0.3 seconds after entering view</p>
+</ScrollAnimation>
+```
+
+### Custom Element Type
+
+```jsx
+<ScrollAnimation as="section" className="my-section">
+  <h2>Section Title</h2>
+  <p>Section content</p>
+</ScrollAnimation>
+```
+
+### Slide from Left
+
+```jsx
+<ScrollAnimation
+  variants={{
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0 }
+  }}
+  delay={0.2}
+>
+  <div>Slides in from the left</div>
+</ScrollAnimation>
+```
+
+### With Inline Styles
+
+```jsx
+<ScrollAnimation style={{ flex: 1 }}>
+  <div>Content with flex: 1</div>
+</ScrollAnimation>
+```
+
+## In Astro Components
+
+When using in Astro files, add `client:load` directive:
+
+```astro
+---
+import ScrollAnimation from './ScrollAnimation.jsx';
+---
+
+<ScrollAnimation className="hero-content" delay={0.2} client:load as="div">
+  <h1>Animated Title</h1>
+  <p>Animated subtitle</p>
+</ScrollAnimation>
+```
+
+## Default Animation
+
+If no custom variants are provided, the default animation is:
+
+```javascript
+const defaultVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0 }
+};
+```
+
+This creates a fade-in from below effect.
+
+## Intersection Observer Configuration
+
+The component uses `useInView` with these settings:
+
+```javascript
+const isInView = useInView(ref, { 
+  once: true,                      // Animation triggers only once
+  amount: 0.3,                     // 30% of element must be visible
+  margin: "0px 0px -100px 0px"    // Triggers 100px before entering viewport
+});
+```
+
+### Configuration Explained
+
+- **`once: true`**: Animation only plays the first time element enters view
+- **`amount: 0.3`**: Triggers when 30% of element is visible
+- **`margin: "0px 0px -100px 0px"`**: Negative bottom margin triggers animation earlier
+
+## How It Works
+
+1. Component creates a ref attached to the animated element
+2. `useInView` hook monitors when ref element enters viewport
+3. When `isInView` becomes `true`, animation state changes from `initial` to `animate`
+4. Framer Motion interpolates between variant values
+5. Custom `delay` is added to the transition
+
+## Common Animation Patterns
+
+### Fade In (Default)
+
+```jsx
+<ScrollAnimation>
+  {children}
+</ScrollAnimation>
+```
+
+### Slide Up
+
+```jsx
+<ScrollAnimation variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}>
+  {children}
+</ScrollAnimation>
+```
+
+### Slide from Right
+
+```jsx
+<ScrollAnimation variants={{ hidden: { opacity: 0, x: 50 }, visible: { opacity: 1, x: 0 } }}>
+  {children}
+</ScrollAnimation>
+```
+
+### Scale Up
+
+```jsx
+<ScrollAnimation variants={{ hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1 } }}>
+  {children}
+</ScrollAnimation>
+```
+
+### Rotate In
+
+```jsx
+<ScrollAnimation variants={{ hidden: { opacity: 0, rotate: -10 }, visible: { opacity: 1, rotate: 0 } }}>
+  {children}
+</ScrollAnimation>
+```
+
+## Custom Transitions
+
+You can customize the transition timing:
+
+```jsx
+<ScrollAnimation
+  transition={{ duration: 1.2, ease: "easeInOut" }}
+  delay={0.5}
+>
+  {children}
+</ScrollAnimation>
+```
+
+### Available Easing Functions
+
+- `"linear"`
+- `"easeIn"`
+- `"easeOut"` (default)
+- `"easeInOut"`
+- `"circIn"`, `"circOut"`, `"circInOut"`
+- `"backIn"`, `"backOut"`, `"backInOut"`
+- Custom cubic bezier: `[0.17, 0.67, 0.83, 0.67]`
+
+## Staggered Animations
+
+Create staggered effects by using incremental delays:
+
+```jsx
+<ScrollAnimation delay={0.2}>
+  <Card1 />
+</ScrollAnimation>
+
+<ScrollAnimation delay={0.4}>
+  <Card2 />
+</ScrollAnimation>
+
+<ScrollAnimation delay={0.6}>
+  <Card3 />
+</ScrollAnimation>
+```
+
+## Performance Notes
+
+- Uses Framer Motion's optimized animation engine
+- `once: true` prevents re-triggering, improving performance
+- Intersection Observer is efficient for scroll detection
+- Animations use CSS transforms (GPU-accelerated)
+
+## Browser Support
+
+Requires:
+- Modern browsers with Intersection Observer API support
+- React 16.8+ (for hooks)
+- Framer Motion library
+
+## Dependencies
+
+```json
+{
+  "framer-motion": "^10.x.x",
+  "react": "^18.x.x"
+}
+```
+
+Imports used:
+
+```javascript
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+```
+
+## TypeScript Version
+
+For TypeScript projects, you can add type definitions:
+
+```typescript
+import { motion, useInView, Variants } from 'framer-motion';
+import { useRef, ReactNode, CSSProperties } from 'react';
+
+interface ScrollAnimationProps {
+  children: ReactNode;
+  variants?: Variants;
+  initial?: string;
+  animate?: string;
+  transition?: any;
+  className?: string;
+  delay?: number;
+  as?: keyof JSX.IntrinsicElements;
+  style?: CSSProperties;
+}
+
+const ScrollAnimation = ({
+  children,
+  variants = {},
+  initial = "hidden",
+  animate = "visible",
+  transition = { duration: 0.6, ease: "easeOut" },
+  className = "",
+  delay = 0,
+  as = "div",
+  style = {}
+}: ScrollAnimationProps) => {
+  // ... implementation
+};
+```
+
+## Advanced Example
+
+Combining multiple features:
+
+```jsx
+<ScrollAnimation
+  as="article"
+  className="feature-card"
+  style={{ padding: '2rem' }}
+  variants={{
+    hidden: { 
+      opacity: 0, 
+      y: 50, 
+      scale: 0.95,
+      rotate: -5 
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      rotate: 0
+    }
+  }}
+  transition={{ 
+    duration: 0.8, 
+    ease: [0.17, 0.67, 0.83, 0.67],
+    scale: { duration: 0.5 }
+  }}
+  delay={0.3}
+>
+  <h3>Feature Title</h3>
+  <p>Feature description with complex animation</p>
+</ScrollAnimation>
+```
+
+## Accessibility
+
+- Animations respect `prefers-reduced-motion` if configured in Framer Motion
+- Content is accessible even if JavaScript is disabled (appears immediately)
+- No impact on screen readers (animations are visual only)
+
+To respect reduced motion preferences:
+
+```javascript
+import { useReducedMotion } from 'framer-motion';
+
+const shouldReduceMotion = useReducedMotion();
+const transition = shouldReduceMotion 
+  ? { duration: 0 } 
+  : { duration: 0.6, ease: "easeOut" };
+```

@@ -1,0 +1,166 @@
+---
+title: Layout
+description: Main layout component providing page structure, SEO meta tags, and structured data for all pages
+---
+
+The `Layout` component is the primary page wrapper for the Chitagá Tech website, built with Astro. It provides consistent page structure, comprehensive SEO optimization, and structured data markup.
+
+## Props
+
+<ParamField path="title" type="string" default="Chitagá Tech | Comunidad de Tecnología e Innovación en Chitagá, Norte de Santander">
+  Page title displayed in browser tab and search results
+</ParamField>
+
+<ParamField path="description" type="string" default="Profesionales chitagüenses creando oportunidades reales en tecnología...">
+  Page description for SEO and social media previews
+</ParamField>
+
+<ParamField path="image" type="string" default="/og-image.png">
+  Open Graph image for social media sharing (relative or absolute URL)
+</ParamField>
+
+## Features
+
+### SEO Meta Tags
+
+The Layout component automatically includes:
+
+- **Basic SEO**: Title, description, canonical URL, author, robots directives
+- **Theme color**: `#184014` for browser UI customization
+- **Keywords**: Pre-configured for technology community content
+- **Viewport**: Responsive meta viewport configuration
+
+### Open Graph & Social Media
+
+Full Open Graph protocol support for rich social media previews:
+
+```astro
+<!-- Automatically generated -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="es_CO" />
+<meta property="og:site_name" content="Chitagá Tech" />
+```
+
+**Twitter Card** meta tags included for optimized Twitter/X sharing.
+
+### Structured Data (JSON-LD)
+
+The component injects Schema.org Organization structured data:
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Chitagá Tech",
+  "url": "[canonical URL]",
+  "logo": "/favicon.ico",
+  "description": "Comunidad de tecnología creada por profesionales...",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Chitagá",
+    "addressRegion": "Norte de Santander",
+    "addressCountry": "CO"
+  }
+}
+```
+
+This helps search engines understand the organization structure and improves local SEO.
+
+## Page Structure
+
+The Layout renders a complete HTML document with:
+
+1. **Header**: Sticky navigation with desktop/mobile responsive design
+2. **Mobile Menu**: Overlay navigation for mobile devices
+3. **Main Content**: Slot for page-specific content
+4. **Footer**: Site links and branding
+
+### Header Behavior
+
+The header implements a glassmorphism effect on scroll:
+
+```javascript
+const header = document.getElementById('site-header');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    header?.classList.add('scrolled');
+  } else {
+    header?.classList.remove('scrolled');
+  }
+});
+```
+
+### Mobile Menu
+
+Hamburger menu with accessibility attributes:
+
+- `aria-label`: "Abrir menú"
+- `aria-expanded`: Toggles between "true"/"false"
+- Prevents body scroll when menu is open
+- Auto-closes when navigation links are clicked
+
+## Usage Example
+
+```astro
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Cursos de Tecnología | Chitagá Tech"
+  description="Aprende programación y desarrollo web con nuestra comunidad"
+  image="/images/courses-og.png"
+>
+  <section>
+    <h1>Nuestros Cursos</h1>
+    <!-- Page content -->
+  </section>
+</Layout>
+```
+
+## URL Construction
+
+The component automatically generates absolute URLs for:
+
+- **Canonical URL**: Based on current pathname
+- **OG Image URL**: Resolves relative image paths to absolute URLs
+- **Site URL**: Uses `Astro.site` or falls back to origin
+
+```astro
+const siteUrl = Astro.site || new URL(Astro.url.origin);
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const ogImageURL = new URL(image, siteUrl);
+```
+
+## Fonts
+
+Pre-configured Google Fonts with optimized loading:
+
+- Montserrat (400, 500, 600, 700)
+- Open Sans (400, 500, 600)
+- Poppins (400, 500, 600, 700)
+- Source Sans 3 (400, 500, 600, 700)
+
+Fonts are preconnected for performance optimization.
+
+## Navigation Links
+
+Default navigation structure:
+
+- Inicio (`#inicio`)
+- Nosotros (`#nosotros`)
+- Servicios (`#servicios`)
+- Proyectos (`#proyectos`)
+- Contacto (`#contacto`)
+
+All links use anchor-based navigation for single-page behavior.
+
+## Source
+
+Location: `src/layouts/Layout.astro:1`

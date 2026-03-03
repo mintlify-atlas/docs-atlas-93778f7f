@@ -1,0 +1,137 @@
+---
+title: Development Setup
+description: Set up your development environment for Chitagá Tech
+---
+
+Get started with Chitagá Tech by setting up your local development environment. This guide covers installation, configuration, and running the project.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- Node.js 18.x or later
+- npm or pnpm package manager
+- Git for version control
+
+## Installation
+
+<Steps>
+  <Step title="Clone the repository">
+    Clone the Chitagá Tech source code to your local machine:
+
+    ```bash
+    git clone <repository-url>
+    cd chitaga-tech
+    ```
+  </Step>
+
+  <Step title="Install dependencies">
+    Install all required packages using npm:
+
+    ```bash
+    npm install
+    ```
+
+    This will install the following core dependencies:
+
+    - **Astro** (v5.17.1) - The web framework
+    - **React** (v19.2.4) - UI component library
+    - **Tailwind CSS** (v4.2.1) - Styling framework
+    - **Framer Motion** (v12.34.4) - Animation library
+    - **React Icons** (v5.5.0) - Icon library
+  </Step>
+
+  <Step title="Start development server">
+    Run the development server:
+
+    ```bash
+    npm run dev
+    ```
+
+    The site will be available at `http://localhost:4321`
+
+    <Note>
+      Use `npm run dev:host` to expose the dev server on your local network. This is useful for testing on mobile devices.
+    </Note>
+  </Step>
+</Steps>
+
+## Available Scripts
+
+The project includes several npm scripts for development and deployment:
+
+<CodeGroup>
+```bash Development
+# Start local development server
+npm run dev
+
+# Start dev server with network access
+npm run dev:host
+```
+
+```bash Build & Preview
+# Build for production
+npm run build
+
+# Preview production build locally
+npm run preview
+
+# Preview with network access
+npm run preview:host
+```
+
+```bash Deploy
+# Build and preview in one command
+npm run deploy
+```
+</CodeGroup>
+
+## Project Structure
+
+Chitagá Tech follows the standard Astro project structure:
+
+```
+chitaga-tech/
+├── src/
+│   ├── components/     # React components
+│   ├── layouts/        # Astro layouts
+│   ├── pages/          # Route pages
+│   └── styles/         # Global CSS and theme
+├── public/             # Static assets
+├── astro.config.mjs    # Astro configuration
+├── tsconfig.json       # TypeScript configuration
+└── package.json        # Project dependencies
+```
+
+## TypeScript Configuration
+
+The project uses TypeScript with Astro's strict configuration:
+
+```json tsconfig.json
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"]
+}
+```
+
+This provides strong type checking and IntelliSense support across `.astro`, `.ts`, and `.tsx` files.
+
+## Development Tips
+
+<Note>
+  **Hot Module Replacement (HMR)** is enabled by default. Changes to your code will automatically reflect in the browser without a full page reload.
+</Note>
+
+- Astro pages are in `src/pages/` and use file-based routing
+- React components should be placed in `src/components/`
+- Global styles are in `src/styles/global.css`
+- Static assets (images, fonts) go in the `public/` directory
+
+## Next Steps
+
+Now that your environment is set up:
+
+1. Learn about [styling with Tailwind CSS v4](/guides/styling)
+2. Explore the [deployment process](/guides/deployment)
+3. Review the [component library](/components/hero)

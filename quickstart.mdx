@@ -1,80 +1,213 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quickstart
+description: Get Chitagá Tech up and running in minutes
 ---
 
-## Get started in three steps
+Get the Chitagá Tech platform running on your local machine in just a few minutes.
 
-Get your documentation site running locally and make your first customization.
+## Prerequisites
 
-### Step 1: Set up your local environment
+Before you begin, ensure you have the following installed:
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+- **Node.js** 18+ ([Download](https://nodejs.org))
+- **npm** or your preferred package manager
+- A code editor (VS Code recommended)
+- Git for version control
 
-### Step 2: Deploy your changes
+## Installation
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+<Steps>
+  <Step title="Clone the repository">
+    Clone the Chitagá Tech repository to your local machine:
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+    ```bash
+    git clone https://github.com/yamiddevofic/chitaga-tech.git
+    cd chitaga-tech
+    ```
+  </Step>
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+  <Step title="Install dependencies">
+    Install all required packages using npm:
 
-### Step 3: Go live
+    <CodeGroup>
+    ```bash npm
+    npm install
+    ```
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+    ```bash yarn
+    yarn install
+    ```
 
-## Next steps
+    ```bash pnpm
+    pnpm install
+    ```
+    </CodeGroup>
 
-Now that you have your docs running, explore these key features:
+    This will install:
+    - **Astro** 5.17.1 - The core framework
+    - **React** 19.2.4 - For interactive components
+    - **Tailwind CSS** 4.2.1 - For styling
+    - **Framer Motion** 12.34.4 - For animations
+  </Step>
 
-<CardGroup cols={2}>
+  <Step title="Start the development server">
+    Launch the local development server:
 
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
+    <CodeGroup>
+    ```bash npm
+    npm run dev
+    ```
 
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
+    ```bash yarn
+    yarn dev
+    ```
 
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
+    ```bash pnpm
+    pnpm dev
+    ```
+    </CodeGroup>
 
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
+    The site will be available at `http://localhost:4321`
+  </Step>
 
-</CardGroup>
+  <Step title="Open in your browser">
+    Navigate to [http://localhost:4321](http://localhost:4321) to see the Chitagá Tech platform running locally.
+  </Step>
+</Steps>
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+  If you need to access the dev server from another device on your network, use `npm run dev:host` instead.
 </Note>
+
+## Project Structure
+
+Once installed, you'll find this structure:
+
+```
+chitaga-tech/
+├── public/              # Static assets
+│   ├── favicon.ico
+│   ├── og-image.png
+│   └── parque.jpg
+├── src/
+│   ├── components/      # Astro & React components
+│   │   ├── hero.astro
+│   │   ├── about.astro
+│   │   ├── services.astro
+│   │   ├── projects.astro
+│   │   ├── contact.astro
+│   │   └── ScrollAnimation.jsx
+│   ├── layouts/         # Page layouts
+│   │   └── Layout.astro
+│   ├── pages/           # Route pages
+│   │   └── index.astro
+│   └── styles/          # Global styles
+│       └── global.css
+├── astro.config.mjs     # Astro configuration
+└── package.json         # Dependencies and scripts
+```
+
+## Your First Customization
+
+Let's customize the hero section to see the platform in action.
+
+<Steps>
+  <Step title="Open the hero component">
+    Open `src/components/hero.astro` in your editor.
+  </Step>
+
+  <Step title="Modify the title">
+    Find the default props around line 14-16:
+
+    ```astro
+    const {
+        title = "Tu futuro no debería depender de irte de Chitagá",
+        subtitle = "Somos profesionales chitagüenses...",
+        // ...
+    } = Astro.props;
+    ```
+
+    Change the title to something personal!
+  </Step>
+
+  <Step title="See the changes">
+    Save the file. Astro's dev server will hot-reload, and you'll see your changes instantly at `localhost:4321`.
+  </Step>
+</Steps>
+
+<Tip>
+  All components support dark mode out of the box. Click the theme toggle button in the bottom-right corner to test it!
+</Tip>
+
+## Available Scripts
+
+<CodeGroup>
+```bash Development
+npm run dev
+# Start dev server at localhost:4321
+
+npm run dev:host
+# Start dev server accessible from network
+```
+
+```bash Build
+npm run build
+# Build for production to ./dist/
+
+npm run preview
+# Preview production build locally
+```
+
+```bash Deployment
+npm run deploy
+# Build and preview in one command
+```
+</CodeGroup>
+
+## Next Steps
+
+Now that you have Chitagá Tech running locally, explore these resources:
+
+<CardGroup cols={2}>
+  <Card title="Component Library" icon="shapes" href="/components/hero">
+    Learn about all available components
+  </Card>
+  <Card title="Styling Guide" icon="palette" href="/guides/styling">
+    Customize colors, fonts, and theme
+  </Card>
+  <Card title="About the Project" icon="heart" href="/about/mission">
+    Understand Chitagá Tech's mission
+  </Card>
+  <Card title="Contributing" icon="code-branch" href="/guides/contributing">
+    Help improve the platform
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Port 4321 is already in use">
+    If port 4321 is occupied, Astro will automatically try the next available port (4322, 4323, etc.). Check your terminal output for the actual URL.
+  </Accordion>
+
+  <Accordion title="Module not found errors">
+    Delete `node_modules` and `package-lock.json`, then run `npm install` again:
+
+    ```bash
+    rm -rf node_modules package-lock.json
+    npm install
+    ```
+  </Accordion>
+
+  <Accordion title="Changes not reflecting in browser">
+    Hard refresh your browser (Ctrl+Shift+R on Windows/Linux, Cmd+Shift+R on Mac) or clear the cache.
+  </Accordion>
+
+  <Accordion title="TypeScript errors in VS Code">
+    Make sure you have the Astro extension installed. Install it from the Extensions marketplace: "Astro" by Astro.
+  </Accordion>
+</AccordionGroup>
+
+<Warning>
+  If you encounter any issues not covered here, check the [GitHub repository](https://github.com/yamiddevofic/chitaga-tech) for open issues or create a new one.
+</Warning>

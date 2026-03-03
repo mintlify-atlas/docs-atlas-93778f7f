@@ -1,0 +1,184 @@
+---
+title: Services Component
+description: Services grid component displaying offerings with icons and descriptions
+icon: square-3
+---
+
+The Services component showcases available offerings in a responsive grid layout with animated cards, each featuring an icon, title, and description.
+
+## Overview
+
+This component is built with Astro and displays a centered header followed by a grid of service cards. Each card animates into view with a staggered delay for a polished presentation.
+
+## Source Location
+
+```
+~/workspace/source/src/components/services.astro
+```
+
+## Props
+
+This component does not accept any props. All content is hardcoded within the component.
+
+## Usage
+
+### Basic Usage
+
+```astro
+---
+import Services from '../components/services.astro';
+---
+
+<Services />
+```
+
+## Features
+
+### Staggered Card Animations
+
+Each service card animates with an incremental delay:
+
+- **Header**: 0.2s delay
+- **Card 1**: 0.3s delay
+- **Card 2**: 0.4s delay
+- **Card 3**: 0.5s delay
+- **Card 4**: 0.6s delay
+
+All cards use the same animation variant:
+
+```astro
+<ScrollAnimation delay={0.3} variants={{
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 }
+}} client:load as="div">
+  <!-- Service card -->
+</ScrollAnimation>
+```
+
+### Service Cards
+
+Four hardcoded service offerings:
+
+1. **Cursos** (Courses)
+   - Icon: Book/reading symbol
+   - Programming, web design, and digital tools
+
+2. **Talleres** (Workshops)
+   - Icon: Wrench/tools symbol
+   - Short, practical sessions
+
+3. **Encuentros** (Meetups)
+   - Icon: Users/people symbol
+   - Community connection events
+
+4. **Mentoría** (Mentoring)
+   - Icon: Checkmark/success symbol
+   - Professional guidance
+
+## Layout Structure
+
+```
+services-section
+└── services-inner (max-width: 1080px)
+    ├── services-header (ScrollAnimation wrapper)
+    │   ├── services-badge
+    │   ├── services-title
+    │   └── services-subtitle
+    └── services-grid
+        ├── service-card (x4)
+        │   ├── service-icon-wrapper
+        │   │   └── SVG icon
+        │   ├── h3 (title)
+        │   └── p (description)
+```
+
+## Responsive Behavior
+
+### Grid Layout
+
+- **Mobile**: Single column, flex direction vertical, 2rem gap
+- **Small (640px+)**: 2-column grid, 1.5rem gap
+- **Large (1024px+)**: 2-column grid, 2rem gap
+- **XL (1280px+)**: 4-column grid, 2rem gap
+
+```css
+@media (min-width: 1280px) {
+  .services-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+}
+```
+
+## Styling Notes
+
+### Colors
+
+- Background: Light gray (`#f9fafb`) / Dark mode (`#191919`)
+- Card background: White (`#ffffff`) / Dark mode (`rgba(255, 255, 255, 0.04)`)
+- Card border: `rgba(0, 0, 0, 0.08)` / Dark mode (`rgba(255, 255, 255, 0.08)`)
+- Icon wrapper: Orange tint (`rgba(185, 58, 5, 0.1)`)
+- Icon color: `--color-orange`
+
+### Card Hover Effects
+
+```css
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+```
+
+Dark mode uses stronger shadow:
+
+```css
+:global(.dark) .service-card:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+```
+
+### Typography
+
+- **Badge**: `--font-pop`, 0.7rem, uppercase, green/orange
+- **Title**: `--font-montserrat`, 700 weight, 1.75rem → 2.25rem (tablet+)
+- **Subtitle**: `--font-sans`, 1rem, gray, max-width 560px
+- **Card heading**: `--font-montserrat`, 600 weight, 1.05rem
+- **Card text**: `--font-sans`, 0.875rem, 1.65 line-height
+
+### Icon Wrapper
+
+- Size: 2.75rem × 2.75rem
+- Border radius: 0.75rem
+- Background: Orange tint with higher opacity in dark mode
+- SVG size: 1.25rem × 1.25rem
+
+## Content Structure
+
+Hardcoded Spanish content:
+
+- **Badge**: "Cómo lo haremos" (How we'll do it)
+- **Title**: "Formación real, no solo alfabetización"
+- **Subtitle**: Explanation of training approach
+- **Cards**: Four service offerings with titles and descriptions
+
+## Section Spacing
+
+```css
+padding: 5rem 2rem;        /* Mobile */
+padding: 6rem 3rem;        /* Tablet (768px+) */
+padding: 8rem 4rem;        /* Desktop (1024px+) */
+```
+
+## Dependencies
+
+- `ScrollAnimation.jsx` - Animation wrapper component
+- Framer Motion (via ScrollAnimation)
+- CSS custom properties defined in global styles
+- Inline SVG icons (Lucide-style stroke icons)
+
+## Accessibility
+
+- Semantic HTML structure with proper headings
+- SVG icons use proper stroke attributes
+- Card structure allows keyboard navigation
+- Text maintains readable contrast ratios

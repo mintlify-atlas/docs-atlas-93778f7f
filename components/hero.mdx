@@ -1,0 +1,161 @@
+---
+title: Hero Component
+description: Main hero section component for landing pages with animated content and image
+icon: square-1
+---
+
+The Hero component is the first section visitors see on the homepage. It features a two-column layout with animated text content and an image that adapts to light/dark themes.
+
+## Overview
+
+This component is built with Astro and uses the `ScrollAnimation` wrapper for smooth entrance animations. It displays a badge, title, subtitle, call-to-action buttons, and a responsive hero image.
+
+## Source Location
+
+```
+~/workspace/source/src/components/hero.astro
+```
+
+## Props
+
+<ParamField path="title" type="string" default='"Tu futuro no debería depender de irte de Chitagá"'>
+  Main heading text displayed prominently in the hero section
+</ParamField>
+
+<ParamField path="subtitle" type="string" default='"Somos profesionales chitagüenses construyendo el primer espacio de tecnología hecho por y para nuestra gente. Para que quedarte sea una elección, no una limitación."'>
+  Supporting text that appears below the title
+</ParamField>
+
+<ParamField path="cta" type="string" default='"Quiero ser parte"'>
+  Text for the primary call-to-action button
+</ParamField>
+
+<ParamField path="ctaHref" type="string" default='"#contacto"'>
+  URL or anchor link for the primary CTA button
+</ParamField>
+
+<ParamField path="imgSrc" type="string" default='"/parque.jpg"'>
+  Image source for light mode
+</ParamField>
+
+<ParamField path="imgDarkSrc" type="string" default='"/parque.jpg"'>
+  Image source for dark mode
+</ParamField>
+
+<ParamField path="imgAlt" type="string" default='"Chitagá, Norte de Santander"'>
+  Alt text for the hero image (accessibility)
+</ParamField>
+
+## Usage
+
+### Basic Usage
+
+```astro
+---
+import Hero from '../components/hero.astro';
+---
+
+<Hero />
+```
+
+### Custom Props
+
+```astro
+---
+import Hero from '../components/hero.astro';
+---
+
+<Hero 
+  title="Welcome to Our Platform"
+  subtitle="Build amazing things with modern technology"
+  cta="Get Started"
+  ctaHref="/signup"
+  imgSrc="/hero-light.jpg"
+  imgDarkSrc="/hero-dark.jpg"
+  imgAlt="Platform screenshot"
+/>
+```
+
+## Features
+
+### Animation System
+
+The Hero component uses `ScrollAnimation` with different delays for staggered entrance effects:
+
+- **Content area**: 0.2s delay with default fade-in-up animation
+- **Image area**: 0.4s delay with scale animation
+
+```astro
+<ScrollAnimation className="hero-content" delay={0.2} client:load as="div">
+  <!-- Content -->
+</ScrollAnimation>
+
+<ScrollAnimation 
+  delay={0.4} 
+  variants={{
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1 }
+  }} 
+  client:load 
+  as="div"
+>
+  <!-- Image -->
+</ScrollAnimation>
+```
+
+### Theme-Aware Images
+
+The component automatically switches between light and dark images based on the current theme:
+
+```css
+.hero-img-light { display: block; }
+.hero-img-dark  { display: none;  }
+:global(.dark) .hero-img-light { display: none;  }
+:global(.dark) .hero-img-dark  { display: block; }
+```
+
+### Secondary CTA
+
+In addition to the primary CTA, there's a secondary link that directs to the "about" section:
+
+```astro
+<a href="#nosotros" class="hero-cta-secondary">
+  Conoce por qué lo hacemos &rarr;
+</a>
+```
+
+## Layout Structure
+
+```
+hero-section
+└── hero-inner (max-width: 1080px, grid layout)
+    ├── hero-content (ScrollAnimation wrapper)
+    │   ├── hero-badge
+    │   ├── hero-title
+    │   ├── hero-subtitle
+    │   └── hero-actions
+    │       ├── hero-cta (primary button)
+    │       └── hero-cta-secondary (text link)
+    └── hero-image-wrapper (ScrollAnimation wrapper)
+        ├── hero-img (light mode)
+        └── hero-img (dark mode)
+```
+
+## Responsive Behavior
+
+- **Mobile**: Single column, stacked layout
+- **Tablet (768px+)**: Two-column grid with 4rem gap
+- **Desktop (1024px+)**: Two-column grid with 5rem gap
+
+## Styling Notes
+
+- Uses CSS custom properties for colors: `--color-green-dark`, `--color-orange`, `--color-white`
+- Font families: `--font-montserrat` (titles), `--font-pop` (buttons), `--font-sans` (body text)
+- Hover effects on CTAs include `translateY(-2px)` and custom shadows
+- Image has 4:3 aspect ratio with rounded corners (1rem border-radius)
+
+## Dependencies
+
+- `ScrollAnimation.jsx` - Animation wrapper component
+- Framer Motion (via ScrollAnimation)
+- CSS custom properties defined in global styles
