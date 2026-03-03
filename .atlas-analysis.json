@@ -1,0 +1,79 @@
+{
+  "projectType": "frontend",
+  "projectName": "Chitagá Tech",
+  "projectDescription": "Community technology platform created by professionals from Chitagá, Colombia to provide tech education and opportunities locally.",
+  "theme": "almond",
+  "primaryColor": "#184014",
+  "lightColor": "#086842",
+  "darkColor": "#B93A05",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["introduction", "quickstart"]
+          },
+          {
+            "group": "About",
+            "pages": ["about/mission", "about/vision", "about/community"]
+          },
+          {
+            "group": "Services",
+            "pages": ["services/courses", "services/workshops", "services/meetups", "services/mentorship"]
+          },
+          {
+            "group": "Projects",
+            "pages": ["projects/overview", "projects/educational-portal", "projects/digital-map", "projects/agricultural-app"]
+          }
+        ]
+      },
+      {
+        "tab": "Components",
+        "groups": [
+          {
+            "group": "Component Library",
+            "pages": ["components/hero", "components/about", "components/services", "components/projects", "components/stats", "components/contact", "components/scroll-animation"]
+          },
+          {
+            "group": "Layout",
+            "pages": ["components/layout", "components/button-toggle"]
+          }
+        ]
+      },
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Development",
+            "pages": ["guides/setup", "guides/styling", "guides/deployment"]
+          },
+          {
+            "group": "Contributing",
+            "pages": ["guides/contributing", "guides/code-style"]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Community-focused technology education platform",
+    "Responsive Astro-based website with React components",
+    "Dark mode support with custom theme system",
+    "Scroll-based animations using Framer Motion",
+    "Local projects serving Chitagá community needs",
+    "Mobile-first design with glassmorphism effects"
+  ],
+  "publicApiSurface": [
+    "Hero component with customizable props",
+    "About section with mission and vision cards",
+    "Services grid showcasing courses, workshops, meetups, and mentorship",
+    "Projects showcase with educational portal, digital map, and agricultural app",
+    "Stats component for community metrics",
+    "Contact form component",
+    "ScrollAnimation wrapper component",
+    "ButtonToggle for dark mode switching",
+    "Layout component with header, navigation, and footer"
+  ]
+}
