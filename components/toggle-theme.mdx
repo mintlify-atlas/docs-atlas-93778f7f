@@ -1,0 +1,285 @@
+---
+title: toggleTheme Utility
+description: Simple utility function to toggle dark mode
+---
+
+The `toggleTheme` utility is a simple JavaScript function that toggles dark mode by adding or removing the `dark` class from the document root.
+
+## Overview
+
+This utility provides a minimalist approach to theme switching, directly manipulating the DOM to toggle between light and dark modes. It's used by the ButtonToggle component to enable dark mode functionality.
+
+## Source File
+
+`src/components/toggleTheme.jsx`
+
+## Function Signature
+
+```javascript
+const toggleTheme = () => void
+```
+
+## Source Code
+
+```javascript
+"use client";
+
+const toggleTheme = () => {
+    document.documentElement.classList.toggle('dark');
+}
+
+export default toggleTheme;
+```
+
+## Usage
+
+### In React Components
+
+Import and call the function on button click:
+
+```jsx
+import toggleTheme from './toggleTheme.jsx';
+
+function ThemeButton() {
+  return (
+    <button onClick={toggleTheme}>
+      Toggle Theme
+    </button>
+  );
+}
+```
+
+### In Astro Components
+
+Use with a client directive for interactivity:
+
+```astro
+---
+import ButtonToggle from '../components/buttonToggle.jsx';
+---
+
+<ButtonToggle client:load />
+```
+
+## How It Works
+
+The function uses the DOM `classList.toggle()` method to add or remove the `dark` class from `document.documentElement` (the `<html>` element).
+
+<Steps>
+  <Step title="Initial state">
+    When the page loads, the `<html>` element has no `dark` class, so light mode styles apply.
+  </Step>
+  
+  <Step title="First toggle">
+    Calling `toggleTheme()` adds the `dark` class to `<html>`, activating dark mode styles defined with the `.dark` selector.
+  </Step>
+  
+  <Step title="Second toggle">
+    Calling `toggleTheme()` again removes the `dark` class, reverting to light mode.
+  </Step>
+</Steps>
+
+## CSS Integration
+
+The function works in conjunction with CSS that uses the `.dark` selector. For example, from `src/styles/global.css`:
+
+```css
+/* Light mode (default) */
+body {
+    background: #ffffff;
+}
+
+/* Dark mode */
+.dark body {
+    background: #191919;
+}
+```
+
+Or with the custom dark variant in Tailwind CSS v4:
+
+```css
+@custom-variant dark (&:where(.dark, .dark *));
+```
+
+## Client Directive
+
+The `"use client"` directive at the top of the file indicates this code should only run in the browser (client-side), not during server-side rendering.
+
+```javascript
+"use client";
+```
+
+This is important because:
+- `document` is only available in the browser
+- Server-side rendering would fail if trying to access `document.documentElement`
+
+## Limitations
+
+<Warning>
+  This utility does **not** persist the theme preference. When the page reloads, the theme resets to light mode.
+</Warning>
+
+### No Persistence
+
+The current implementation doesn't save the user's theme choice. Each page load starts in light mode regardless of the user's previous selection.
+
+### No System Preference Detection
+
+The utility doesn't check the user's system-level dark mode preference (`prefers-color-scheme`).
+
+## Enhancement Ideas
+
+<AccordionGroup>
+  <Accordion title="Add localStorage persistence">
+    Save the theme preference so it persists across page loads:
+
+    ```javascript
+    "use client";
+
+    const toggleTheme = () => {
+        const html = document.documentElement;
+        html.classList.toggle('dark');
+        
+        // Save preference
+        const isDark = html.classList.contains('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    // On page load, restore saved preference
+    if (typeof window !== 'undefined') {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    }
+
+    export default toggleTheme;
+    ```
+  </Accordion>
+
+  <Accordion title="Respect system preference">
+    Initialize theme based on user's system preference:
+
+    ```javascript
+    "use client";
+
+    const toggleTheme = () => {
+        document.documentElement.classList.toggle('dark');
+    }
+
+    // Initialize based on system preference
+    if (typeof window !== 'undefined') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+            document.documentElement.classList.add('dark');
+        }
+    }
+
+    export default toggleTheme;
+    ```
+  </Accordion>
+
+  <Accordion title="Return current theme">
+    Make the function return the new theme state:
+
+    ```javascript
+    "use client";
+
+    const toggleTheme = () => {
+        const html = document.documentElement;
+        html.classList.toggle('dark');
+        return html.classList.contains('dark') ? 'dark' : 'light';
+    }
+
+    export default toggleTheme;
+    ```
+
+    This allows components to update their UI based on the current theme.
+  </Accordion>
+
+  <Accordion title="Add smooth transition">
+    Prevent jarring color changes with CSS transitions:
+
+    ```javascript
+    "use client";
+
+    const toggleTheme = () => {
+        const html = document.documentElement;
+        
+        // Add transition class before toggle
+        html.style.transition = 'background-color 0.3s ease';
+        
+        html.classList.toggle('dark');
+        
+        // Remove transition after it completes
+        setTimeout(() => {
+            html.style.transition = '';
+        }, 300);
+    }
+
+    export default toggleTheme;
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Browser Compatibility
+
+The function uses standard DOM APIs that are supported in all modern browsers:
+
+- `document.documentElement` - IE9+
+- `classList.toggle()` - IE10+ (with polyfill for IE9)
+
+<Note>
+  For IE9 support, you may need a `classList` polyfill. Modern browsers (Chrome, Firefox, Safari, Edge) support this natively.
+</Note>
+
+## Usage in Chitagá Tech
+
+In the Chitagá Tech project, this utility is imported by the ButtonToggle component:
+
+```jsx
+// src/components/buttonToggle.jsx
+import React, { useState } from "react";
+import { MdDarkMode, MdLightMode } from "react-icons/md";
+import toggleTheme from "./toggleTheme";
+
+export default function ButtonToggle() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const handleToggleTheme = () => {
+    toggleTheme();
+    setIsDarkMode(!isDarkMode);
+  };
+
+  return (
+    <button id="toggle-theme" onClick={handleToggleTheme}>
+      {isDarkMode ? <MdLightMode size={20} /> : <MdDarkMode size={20} />}
+    </button>
+  );
+}
+```
+
+## Testing
+
+To test the utility:
+
+1. Open your browser's developer console
+2. Run: `document.documentElement.classList.contains('dark')`
+3. Should return `false` initially
+4. Click the theme toggle button
+5. Run the same command again - should return `true`
+6. Reload the page - returns to `false` (no persistence)
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="ButtonToggle Component" icon="toggle-on" href="/components/button-toggle">
+    React component that uses this utility
+  </Card>
+  <Card title="Styling Guide" icon="palette" href="/guides/styling">
+    Learn about the dark mode CSS implementation
+  </Card>
+  <Card title="Global Styles" icon="paintbrush" href="/guides/styling">
+    See how dark mode styles are defined
+  </Card>
+</CardGroup>

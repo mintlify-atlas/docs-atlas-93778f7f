@@ -1,0 +1,219 @@
+---
+title: Testimonials Component
+description: Display community member testimonials with quote cards
+---
+
+The Testimonials component displays feedback from community members in an attractive grid layout with quote cards.
+
+## Overview
+
+This component showcases testimonials from Chitagá Tech community members, featuring their experiences with courses, workshops, meetups, and mentorship programs. Each testimonial includes a quote, author name, role, and avatar initials.
+
+## Source File
+
+`src/components/testimonials.astro`
+
+## Usage
+
+```astro
+---
+import Testimonials from '../components/testimonials.astro';
+---
+
+<Testimonials />
+```
+
+## Props
+
+This component does not accept any props. All content is embedded within the component.
+
+## Structure
+
+The component displays three testimonials in a responsive grid:
+
+1. **Carlos Mendoza** - Web Developer who learned programming from scratch
+2. **Laura Ramírez** - UX/UI Designer who connected with the community through meetups
+3. **Andrés Peña** - Engineering Student who benefited from personalized mentorship
+
+## Features
+
+### Responsive Grid
+
+The testimonials grid adapts to different screen sizes:
+
+- **Mobile**: Single column (1 card per row)
+- **Tablet** (640px+): Two columns (2 cards per row)
+- **Desktop** (1024px+): Three columns (3 cards per row)
+
+### Quote Icon
+
+Each testimonial card includes a decorative quote icon at the top, styled with the orange accent color at 50% opacity.
+
+### Avatar Initials
+
+Each author has a circular avatar displaying their initials:
+- **Light mode**: Green background (`--color-green-dark`)
+- **Dark mode**: Orange background (`--color-orange`)
+
+### Hover Effects
+
+Cards feature smooth hover animations:
+- Translates upward by 2px
+- Displays enhanced shadow
+- Smooth transition (0.3s ease)
+
+## Layout
+
+```
+┌─────────────────────────────────────┐
+│  Testimonials Section               │
+│  ┌───────────────────────────────┐  │
+│  │ Badge: "Testimonios"          │  │
+│  │ Title: "Lo que dicen..."      │  │
+│  └───────────────────────────────┘  │
+│                                     │
+│  ┌─────────┐ ┌─────────┐ ┌───────┐ │
+│  │ Card 1  │ │ Card 2  │ │ Card 3│ │
+│  │ Quote   │ │ Quote   │ │ Quote │ │
+│  │ Author  │ │ Author  │ │ Author│ │
+│  └─────────┘ └─────────┘ └───────┘ │
+└─────────────────────────────────────┘
+```
+
+## Styling
+
+### Section Background
+
+- **Light mode**: `#f9fafb` (light gray)
+- **Dark mode**: `#191919` (near black)
+
+### Card Styling
+
+- Border radius: `1rem`
+- Padding: `2rem`
+- Border: Subtle with transparency
+- Background: White in light mode, semi-transparent white in dark mode
+
+### Typography
+
+- **Quote**: Italic, line-height 1.7, font-size 0.925rem
+- **Author name**: Montserrat font, weight 600, font-size 0.875rem
+- **Role**: Sans font, font-size 0.8rem, muted color
+
+## Dark Mode
+
+The component fully supports dark mode with automatic theme switching:
+
+- Background color changes
+- Text colors adjust for readability
+- Avatar background switches from green to orange
+- Card borders and backgrounds adapt
+
+## Example in Context
+
+The testimonials component is typically placed after the projects section on the homepage:
+
+```astro
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/hero.astro";
+import Projects from "../components/projects.astro";
+import Testimonials from "../components/testimonials.astro";
+import Contact from "../components/contact.astro";
+---
+
+<Layout title="Chitagá Tech">
+    <Hero />
+    <Projects />
+    <Testimonials />
+    <Contact />
+</Layout>
+```
+
+<Note>
+  The testimonials content is currently hardcoded within the component. For dynamic testimonials from a CMS or database, you would need to refactor the component to accept testimonial data as props.
+</Note>
+
+## Accessibility
+
+- Uses semantic HTML structure
+- Quote icon is decorative (no alt text needed as it's inline SVG)
+- Color contrast meets WCAG standards in both light and dark modes
+- Text remains readable across all viewport sizes
+
+## Customization Ideas
+
+To make the component more flexible:
+
+<Accordion title="Accept testimonials as props">
+```astro
+---
+interface Testimonial {
+  quote: string;
+  author: string;
+  role: string;
+  initials: string;
+}
+
+interface Props {
+  testimonials: Testimonial[];
+}
+
+const { testimonials } = Astro.props;
+---
+
+<div class="testimonials-grid">
+  {testimonials.map((testimonial) => (
+    <div class="testimonial-card">
+      <!-- Render testimonial data -->
+    </div>
+  ))}
+</div>
+```
+</Accordion>
+
+<Accordion title="Add avatar images">
+Instead of initials, support actual images:
+
+```astro
+interface Testimonial {
+  quote: string;
+  author: string;
+  role: string;
+  avatarUrl?: string;
+  initials: string;
+}
+```
+
+Then conditionally render:
+```astro
+{testimonial.avatarUrl ? (
+  <img src={testimonial.avatarUrl} alt={testimonial.author} />
+) : (
+  <span>{testimonial.initials}</span>
+)}
+```
+</Accordion>
+
+## Dependencies
+
+- **Fonts**: Montserrat (author names), Source Sans 3 (quotes and roles), Poppins (badge)
+- **CSS Variables**: `--color-green-dark`, `--color-orange`, `--color-white`, font family variables
+- **Dark Mode**: Requires `.dark` class on document root
+
+## Related Components
+
+<CardGroup cols={2}>
+  <Card title="About Component" icon="users" href="/components/about">
+    Similar section-based component with cards
+  </Card>
+  <Card title="Stats Component" icon="chart-line" href="/components/stats">
+    Another component showcasing community impact
+  </Card>
+  <Card title="Contact Component" icon="envelope" href="/components/contact">
+    Typically follows testimonials on homepage
+  </Card>
+  <Card title="Services Component" icon="briefcase" href="/components/services">
+    Grid layout with similar structure
+  </Card>
+</CardGroup>

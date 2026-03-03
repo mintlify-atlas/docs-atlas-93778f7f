@@ -7,6 +7,7 @@
     "light": "#086842",
     "dark": "#B93A05"
   },
+  "favicon": "/favicon.ico",
   "navbar": {
     "primary": {
       "type": "github",
@@ -46,11 +47,11 @@
         "groups": [
           {
             "group": "Component Library",
-            "pages": ["components/hero", "components/about", "components/services", "components/projects", "components/stats", "components/contact", "components/scroll-animation"]
+            "pages": ["components/hero", "components/about", "components/services", "components/projects", "components/stats", "components/contact", "components/testimonials", "components/scroll-animation"]
           },
           {
             "group": "Layout",
-            "pages": ["components/layout", "components/button-toggle"]
+            "pages": ["components/layout", "components/button-toggle", "components/toggle-theme"]
           }
         ]
       },
